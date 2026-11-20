@@ -18,9 +18,9 @@
     </div>
     @endif
 
-    <div class="card card-outline card-primary">
-        <div class="card-header">
-            <h3 class="card-title">Detail Angsuran Pinjaman</h3>
+    <div class="card border-top border-primary border-3 shadow-sm">
+        <div class="card-header bg-white">
+            <h5 class="card-title mb-0">Detail Angsuran Pinjaman</h5>
         </div>
         <div class="card-body">
             <h5>Informasi Anggota</h5>
@@ -46,7 +46,7 @@
             <h5 class="mt-4">Informasi Tagihan</h5>
             <table class="table table-bordered">
                 <tr>
-                    <th>Pokok</th>
+                    <th width="30%">Pokok</th>
                     <td>Rp {{ number_format($angsuran->pokok, 2, ',', '.') }}</td>
                 </tr>
                 <tr>
@@ -71,15 +71,15 @@
 
             {{-- Form Pembayaran --}}
             @if($angsuran->status !== 'lunas' && $angsuran->pinjaman->status === 'dicairkan')
-            <div class="card card-success card-outline mt-4">
-                <div class="card-header">
-                    <h3 class="card-title">Form Pembayaran Angsuran</h3>
+            <div class="card border-top border-success border-3 shadow-sm mt-4">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Form Pembayaran Angsuran</h5>
                 </div>
                 <form action="{{ route('angsuran.pay', $angsuran->id) }}" method="POST">
                     @csrf
                     <div class="card-body">
-                        <div class="form-group">
-                            <label>Jumlah Pembayaran (Rp)</label>
+                        <div class="mb-3">
+                            <label class="form-label">Jumlah Pembayaran (Rp)</label>
                             <input type="number"
                                    name="jumlah_bayar"
                                    class="form-control"
@@ -89,8 +89,8 @@
                                    value="{{ old('jumlah_bayar', $angsuran->sisa_tagihan) }}"
                                    required>
                         </div>
-                        <div class="form-group">
-                            <label>Tanggal Pembayaran</label>
+                        <div class="mb-3">
+                            <label class="form-label">Tanggal Pembayaran</label>
                             <input type="date"
                                    name="tanggal_bayar"
                                    class="form-control"
@@ -98,14 +98,14 @@
                                    max="{{ today()->format('Y-m-d') }}"
                                    required>
                         </div>
-                        <div class="form-group">
-                            <label>Keterangan</label>
+                        <div class="mb-3">
+                            <label class="form-label">Keterangan</label>
                             <textarea name="keterangan" class="form-control" rows="2">{{ old('keterangan') }}</textarea>
                         </div>
                     </div>
-                    <div class="card-footer">
+                    <div class="card-footer bg-white">
                         <button type="submit" class="btn btn-success" onclick="return confirm('Simpan pembayaran ini?')">
-                            <i class="fas fa-money-bill-wave"></i> Simpan Pembayaran
+                            <i class="bi bi-cash-coin me-1"></i> Simpan Pembayaran
                         </button>
                     </div>
                 </form>
@@ -113,14 +113,14 @@
             @endif
 
             {{-- Riwayat Pembayaran --}}
-            <div class="card card-outline card-info mt-4">
-                <div class="card-header">
-                    <h3 class="card-title">Riwayat Pembayaran</h3>
+            <div class="card border-top border-info border-3 shadow-sm mt-4 mb-3">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Riwayat Pembayaran</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
+                        <table class="table table-bordered align-middle mb-0">
+                            <thead class="table-light">
                                 <tr>
                                     <th>No</th>
                                     <th>Kode Pembayaran</th>
@@ -128,6 +128,7 @@
                                     <th>Jumlah</th>
                                     <th>Petugas</th>
                                     <th>Keterangan</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -139,10 +140,17 @@
                                     <td>Rp {{ number_format($pembayaran->jumlah_bayar, 2, ',', '.') }}</td>
                                     <td>{{ $pembayaran->petugas->name ?? '-' }}</td>
                                     <td>{{ $pembayaran->keterangan ?? '-' }}</td>
+                                    <td>
+                                        <a href="{{ route('laporan.kwitansi', $pembayaran->id) }}"
+                                           class="btn btn-danger btn-sm"
+                                           target="_blank">
+                                            <i class="bi bi-file-earmark-pdf me-1"></i> Kwitansi
+                                        </a>
+                                    </td>
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="6" class="text-center">Belum ada pembayaran.</td>
+                                    <td colspan="7" class="text-center">Belum ada pembayaran.</td>
                                 </tr>
                                 @endforelse
                             </tbody>
@@ -152,7 +160,7 @@
             </div>
 
             <a href="{{ route('angsuran.index') }}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Kembali
+                <i class="bi bi-arrow-left me-1"></i> Kembali
             </a>
         </div>
     </div>

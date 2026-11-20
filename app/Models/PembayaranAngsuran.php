@@ -12,6 +12,8 @@ class PembayaranAngsuran extends Model
         'kode_pembayaran',
         'tanggal_bayar',
         'jumlah_bayar',
+        'pokok_dibayar',
+        'bunga_dibayar',
         'dibayar_oleh',
         'keterangan',
     ];
@@ -21,6 +23,8 @@ class PembayaranAngsuran extends Model
         return [
             'tanggal_bayar' => 'date',
             'jumlah_bayar' => 'decimal:2',
+            'pokok_dibayar' => 'decimal:2',
+            'bunga_dibayar' => 'decimal:2',
         ];
     }
 

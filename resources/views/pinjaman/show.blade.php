@@ -5,29 +5,29 @@
 @section('content')
 <div class="container-fluid">
 
-    <div class="d-flex justify-content-between mb-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
-            <h3>Detail Pinjaman</h3>
-            <p class="text-muted">
+            <h3 class="mb-1">Detail Pinjaman</h3>
+            <p class="text-muted mb-0">
                 Informasi lengkap pengajuan pinjaman anggota
             </p>
         </div>
 
         <a href="{{ route('pinjaman.index') }}"
-           class="btn btn-secondary align-self-start">
-            <i class="fas fa-arrow-left"></i> Kembali
+           class="btn btn-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Kembali
         </a>
     </div>
 
-    <div class="card card-primary card-outline">
+    <div class="card border-top border-primary border-3 shadow-sm">
 
-        <div class="card-header">
-            <h3 class="card-title">Informasi Pengajuan Pinjaman</h3>
+        <div class="card-header bg-white">
+            <h5 class="card-title mb-0">Informasi Pengajuan Pinjaman</h5>
         </div>
 
         <div class="card-body">
 
-            <div class="row">
+            <div class="row g-3">
 
                 <div class="col-md-6">
                     <h5 class="text-primary mb-3">Data Anggota</h5>
@@ -85,20 +85,20 @@
 
             <h5 class="text-primary mb-3">Tujuan Pinjaman</h5>
 
-            <div class="border rounded p-3 mb-4">
+            <div class="border rounded p-3 mb-4 bg-light">
                 {{ $pinjaman->tujuan }}
             </div>
 
             <h5 class="text-primary mb-3">Status dan Proses Pinjaman</h5>
 
-            <table class="table table-bordered">
+            <table class="table table-bordered mb-0">
                 <tr>
                     <th width="25%">Status</th>
                     <td>
                         @php
                             $colors = [
-                                'diajukan' => 'warning',
-                                'disetujui' => 'info',
+                                'diajukan' => 'warning text-dark',
+                                'disetujui' => 'info text-dark',
                                 'ditolak' => 'danger',
                                 'dicairkan' => 'primary',
                                 'lunas' => 'success',
@@ -106,7 +106,7 @@
                             ];
                         @endphp
 
-                        <span class="badge badge-{{ $colors[$pinjaman->status] ?? 'secondary' }}">
+                        <span class="badge bg-{{ $colors[$pinjaman->status] ?? 'secondary' }}">
                             {{ ucfirst($pinjaman->status) }}
                         </span>
                     </td>
@@ -145,11 +145,20 @@
 
         </div>
 
-        <div class="card-footer">
+        <div class="card-footer bg-white d-flex gap-2">
             <a href="{{ route('pinjaman.index') }}"
                class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Kembali ke Daftar
+                <i class="bi bi-arrow-left me-1"></i> Kembali ke Daftar
             </a>
+
+            @if(in_array($pinjaman->status, ['dicairkan', 'lunas']))
+                <a href="{{ route('laporan.kartu', $pinjaman->id) }}"
+                   class="btn btn-danger"
+                   target="_blank">
+                    <i class="bi bi-file-earmark-pdf me-1"></i>
+                    Cetak Kartu Angsuran
+                </a>
+            @endif
         </div>
 
     </div>

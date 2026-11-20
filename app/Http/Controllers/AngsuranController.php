@@ -109,12 +109,31 @@ class AngsuranController extends Controller
                 ]);
             }
 
-            // Simpan transaksi pembayaran
+            // Hitung alokasi pembayaran: bunga terlebih dahulu
+            $bungaTagihan = (int) round(
+                (float) $data->bunga * 100
+            );
+
+            $bungaSudahDibayar = (int) round(
+                (float) $data->pembayarans()->sum('bunga_dibayar') * 100
+            );
+
+            $sisaBunga = max(0, $bungaTagihan - $bungaSudahDibayar);
+
+            $pembayaranBunga = min($pembayaran, $sisaBunga);
+
+            $pembayaranPokok = $pembayaran - $pembayaranBunga;
+
+            // Simpan transaksi
             PembayaranAngsuran::create([
                 'angsuran_id' => $data->id,
-                'kode_pembayaran' => 'BYR-' . strtoupper((string) Str::uuid()),
+                'kode_pembayaran' => 'BYR-' . strtoupper(
+                    (string) \Illuminate\Support\Str::uuid()
+                ),
                 'tanggal_bayar' => $validated['tanggal_bayar'],
                 'jumlah_bayar' => $pembayaran / 100,
+                'pokok_dibayar' => $pembayaranPokok / 100,
+                'bunga_dibayar' => $pembayaranBunga / 100,
                 'dibayar_oleh' => auth()->id(),
                 'keterangan' => $validated['keterangan'] ?? null,
             ]);
